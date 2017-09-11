@@ -1,12 +1,15 @@
 import './main.css'
-import {geoFind} from './assets/js/Geolocation'
-import {weatherElement} from './components/WeatherElement'
+import {geoFind} from './js/Geolocation'
+import weatherElement from './components/WeatherElement'
 
 async function getCurrentLocation () {
   try {
     return await geoFind()
   } catch (e) {
-    console.log(e)
+    if (e === 'Error') {
+      showAlert('Could not retrieve location')
+    }
+    console.log('get Current Location', e)
   }
 }
 
@@ -21,17 +24,22 @@ async function fetchWeather (url) {
     let response = await fetch(u)
     return response.json()
   } catch (e) {
-    console.log(e)
+    console.log('fetch weather', e)
   }
 }
 
 async function renderWeatherElement (prom) {
   const data = await prom
-  document.querySelector('main').append(weatherElement(data))
+  const element = await weatherElement(data)
+  document.querySelector('#weatherElement').replaceWith(element)
 }
 
 function cellToFahr (cell) {
   return cell * 9 / 5 + 32
 }
 
-console.log(renderWeatherElement(fetchWeather(buildUrl(getCurrentLocation()))))
+function kmphTpMph (speed) {
+  return speed * .6213711922
+}
+
+renderWeatherElement( fetchWeather( buildUrl( getCurrentLocation())))
