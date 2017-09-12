@@ -5,5 +5,5 @@ before_script:
   - npm install 
 script: 
   - yarn build
-  - surge --project ./build --domain weather-api.surge.sh
+  - surge --project ./build --domain https://weather-api.surge.sh
 
