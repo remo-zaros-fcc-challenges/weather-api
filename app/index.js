@@ -32,6 +32,7 @@ async function renderWeatherElement (prom) {
   const data = await prom
   const element = await weatherElement(data)
   document.querySelector('#weatherElement').replaceWith(element)
+  document.dispatchEvent(new CustomEvent('onContentLoaded', {'bubbles': true, 'composed': true}))
 }
 
 function cellToFahr (cell) {
@@ -43,3 +44,7 @@ function kmphTpMph (speed) {
 }
 
 renderWeatherElement( fetchWeather( buildUrl( getCurrentLocation())))
+document.addEventListener('onContentLoaded', e => {
+   e.target.querySelector('#loader').classList.add('loaded');
+})
+
