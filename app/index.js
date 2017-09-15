@@ -1,6 +1,7 @@
 import './main.css'
 import {geoFind} from './js/Geolocation'
 import weatherElement from './components/WeatherElement'
+import wallPaperElement from './components/wallpaper.js'
 
 async function getCurrentLocation () {
   try {
@@ -30,7 +31,10 @@ async function fetchWeather (url) {
 
 async function renderWeatherElement (prom) {
   const data = await prom
-  const element = await weatherElement(data)
+  const wallpaper = await wallPaperElement(data)
+  const element = weatherElement(data)
+
+  document.querySelector('body').setAttribute('style', `background: url(${wallpaper})`)
   document.querySelector('#weatherElement').replaceWith(element)
   document.dispatchEvent(new CustomEvent('onContentLoaded', {'bubbles': true, 'composed': true}))
 }
@@ -40,11 +44,14 @@ function cellToFahr (cell) {
 }
 
 function kmphTpMph (speed) {
-  return speed * .6213711922
+  return speed * 0.6213711922
 }
 
-renderWeatherElement( fetchWeather( buildUrl( getCurrentLocation())))
-document.addEventListener('onContentLoaded', e => {
-   e.target.querySelector('#loader').classList.add('loaded');
-})
+function kmph (speed) {
+  return speed * 60 * 60 / 1000
+}
 
+renderWeatherElement(fetchWeather(buildUrl(getCurrentLocation())))
+document.addEventListener('onContentLoaded', e => {
+  e.target.querySelector('#loader').classList.add('loaded')
+})
