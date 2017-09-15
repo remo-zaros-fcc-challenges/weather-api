@@ -1,25 +1,25 @@
-import weatherElementData from  './weatherElementData.js'
-import loadImage from '../js/loadImage.js'
+import weatherElementData from './weatherElementData'
+import loadImage from '../js/loadImage'
 import getIconName from '../js/getIconName'
 
-export default async function (data) {
+export default function (data) {
   let image, id, daytime
-  const container = document.createElement('div')
+  const iconElement = document.createElement('div')
   const dataElement = document.createElement('div')
-  container.setAttribute('id', 'weatherElement')
+  iconElement.setAttribute('class', 'weather-status-icon')
+  dataElement.setAttribute('id', 'weatherElement')
 
   id = data.weather[0].id
   daytime = /d.png/g.test(data.weather[0].icon)
-  console.log('daytime', id)
-
   try {
-    image = await loadImage(`../assets/weather-icons/${getIconName(id, daytime)}`)
+    iconElement.innerHTML = `<svg class="icon">
+                               <use xlink:href="#${getIconName(id, daytime)}"/>
+                             </svg>`
     dataElement.innerHTML = weatherElementData(data)
-    container.append(image)
-    container.append(dataElement)
+    dataElement.querySelector('.weather-status-icon').replaceWith(iconElement)
 
-    return container
-  } catch(e) {
+    return dataElement
+  } catch (e) {
     console.log(e)
   }
 }
