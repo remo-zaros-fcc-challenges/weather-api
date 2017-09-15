@@ -3,14 +3,12 @@ export function geoFind () {
     if (!navigator.geolocation) {
       return reject('geolocation not available.')
     }
-
-    function success(position) {
-      const latitude  = position.coords.latitude
+    function success (position) {
+      const latitude = position.coords.latitude
       const longitude = position.coords.longitude
-      return resolve({"lat": latitude, "long": longitude})
+      return resolve({'lat': latitude, 'long': longitude})
     }
-
-    function error() {
+    function error () {
       return reject('Error')
     }
     navigator.geolocation.getCurrentPosition(success, error)
